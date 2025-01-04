@@ -1,13 +1,12 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
-const friendlyErrorsWebpackPlugin = require("friendly-errors-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerWebpackPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
-    entry: { app: path.join(__dirname, "../src/index.js") },
+    entry: { app: path.join(__dirname, "../src/index.tsx") },
     output: {
         path: path.join(__dirname, "../dist"),
         filename: "[name].[chunkhash:4].js"
@@ -45,7 +44,7 @@ module.exports = {
     resolve: {
         extensions: [".ts", ".tsx", ".json", ".js", ".jsx"],
         alias: {
-            "@": path.join(__dirname, "./src")
+            "@": path.join(__dirname, "../src")
         }
     },
     stats: {
@@ -54,5 +53,9 @@ module.exports = {
     optimization: {
         minimize: true,
         minimizer: [new TerserPlugin()]
-    }
+    },
+    devServer: {
+        // 无法访问路由时（Cannot GET /login），查看此配置
+        historyApiFallback: true,
+    },
 };
