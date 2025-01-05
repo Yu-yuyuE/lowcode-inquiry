@@ -1,0 +1,17 @@
+.h1 {
+  display: flex;
+  color: red;
+  justify-content: center;
+  background-color: black;
+}
+
+h1 {
+  display: flex;
+  color: red;
+  justify-content: center;
+  background-color: black;
+}
+
+.h1:hover {
+  background-color: yellow;
+}

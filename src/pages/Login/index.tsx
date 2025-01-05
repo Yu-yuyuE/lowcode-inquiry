@@ -1,10 +1,10 @@
 import React from "react";
-import "./index.less";
+import styles from "./index.module.scss";
 
 function Login() {
   return (
     <div>
-      <h1>React Login</h1>
+      <h1 className={styles.h1}>React Login</h1>
     </div>
   );
 }

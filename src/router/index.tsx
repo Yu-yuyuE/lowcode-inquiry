@@ -1,44 +1,64 @@
-import { Home, Login, Manage, NotFound, Question, Register } from "@/pages";
+import { MainLayout, ManageLayout, QuestionLayout } from "@/layout";
+import { Home, Login, Manage, NotFound, Register, Star, Trash, List, Edit, Stat } from "@/pages";
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />
-  },
-  {
-    path: "/login",
-    element: <Login />
-  },
-  {
-    path: "/manage",
-    element: <Manage />,
+    element: <MainLayout />,
     children: [
-      //   {
-      //     path: "home",
-      //     element: <Home />
-      //   }
-    ]
+      {
+        path: "/",
+        element: <Home />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "manage",
+        element: <ManageLayout />,
+        children: [
+          {
+            path: "list",
+            element: <List />,
+          },
+          {
+            path: "star",
+            element: <Star />,
+          },
+          {
+            path: "trash",
+            element: <Trash />,
+          },
+        ],
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "*",
+        element: <NotFound />,
+      },
+    ],
   },
+
   {
-    path: "/question",
-    element: <Question />,
+    path: "question",
+    element: <QuestionLayout />,
     children: [
-      //   {
-      //     path: "home",
-      //     element: <Home />
-      //   }
-    ]
+      {
+        path: "edit:id",
+        element: <Edit />,
+      },
+      {
+        path: "stat:id",
+        element: <Stat />,
+      },
+    ],
   },
-  {
-    path: "/register",
-    element: <Register />
-  },
-  {
-    path: "*",
-    element: <NotFound />
-  }
 ]);
 
 export default router;

@@ -1,12 +1,11 @@
 import React from "react";
-import "./index.less";
+import styles from "./index.module.scss";
+import { Button, Layout } from "@arco-design/web-react";
+
+const { Header, Footer, Content, Sider } = Layout;
 
 function Home() {
-  return (
-    <div>
-      <h1>React Home</h1>
-    </div>
-  );
+  return <div>Home</div>;
 }
 
 export default Home;

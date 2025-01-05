@@ -54,8 +54,4 @@ module.exports = {
         minimize: true,
         minimizer: [new TerserPlugin()]
     },
-    devServer: {
-        // 无法访问路由时（Cannot GET /login），查看此配置
-        historyApiFallback: true,
-    },
 };
