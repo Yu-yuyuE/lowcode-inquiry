@@ -1,6 +1,6 @@
-// 1. 定义hasUserData，表示是否已经有了用户信息
-// 2. 当hasUserData为false的时候，调用接口获取用户信息，存储到userStore中
-// 3. 当hasUserData为true的时候，无需重新调用接口
+// 1. 定义isWaitingUserData，表示是否已经有了用户信息
+// 2. 当isWaitingUserData为false的时候，调用接口获取用户信息，存储到userStore中
+// 3. 当isWaitingUserData为true的时候，无需重新调用接口
 
 import { useEffect, useState } from "react";
 import { useRequest } from "ahooks";
@@ -10,7 +10,7 @@ import useGetUserInfo from "./useGetUserInfo";
 import { loginReducer } from "@/store/userReducer";
 
 function useLoadUserData() {
-  const [hasUserData, setHasUserData] = useState(false);
+  const [isWaitingUserData, setWaitingUserData] = useState(true);
   const dispatch = useDispatch();
 
   // ajax 加载用户信息
@@ -21,7 +21,7 @@ function useLoadUserData() {
       dispatch(loginReducer({ username, nickname }));
     },
     onFinally() {
-      setHasUserData(true);
+      setWaitingUserData(false);
     },
   });
 
@@ -29,14 +29,14 @@ function useLoadUserData() {
   const { username } = useGetUserInfo(); // user store
   console.log("username", username);
   useEffect(() => {
-    // if (username) {
-    //   setHasUserData(true); // 如果 user store 已经存在用户信息，就不用重新加载了
-    //   return;
-    // }
+    if (username) {
+      setWaitingUserData(false); // 如果 user store 已经存在用户信息，就不用重新加载了
+      return;
+    }
     run(); // 如果 user store 中没有用户信息，则进行加载
   }, [username]);
 
-  return { hasUserData };
+  return { isWaitingUserData };
 }
 
 export default useLoadUserData;

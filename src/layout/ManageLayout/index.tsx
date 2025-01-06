@@ -3,6 +3,7 @@ import styles from "./index.module.scss";
 import { Button, Divider, Layout, Menu, Space } from "@arco-design/web-react";
 import { Outlet } from "react-router-dom";
 import { IconPlus, IconDelete, IconStar, IconList } from "@arco-design/web-react/icon";
+import { useNavPage } from "@/hooks";
 
 const MenuItem = Menu.Item;
 const { Header, Footer, Content, Sider } = Layout;
