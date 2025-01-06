@@ -1,23 +1,24 @@
 // 1. 定义hasUserData，表示是否已经有了用户信息
-// 2. 当hasUserData为false的时候，调用接口获取用户信息，存储到useStore中
-// 3. 当hasUserData为true的时候，就不需要重新调用接口了
+// 2. 当hasUserData为false的时候，调用接口获取用户信息，存储到userStore中
+// 3. 当hasUserData为true的时候，无需重新调用接口
 
 import { useEffect, useState } from "react";
 import { useRequest } from "ahooks";
-// import { useDispatch } from "react-redux";
-import store from "@/store";
+import { useDispatch } from "react-redux";
 import { getUserInfoService } from "@/services/userinfo";
 import useGetUserInfo from "./useGetUserInfo";
+import { loginReducer } from "@/store/userReducer";
 
 function useLoadUserData() {
   const [hasUserData, setHasUserData] = useState(false);
+  const dispatch = useDispatch();
 
   // ajax 加载用户信息
   const { run } = useRequest(getUserInfoService, {
     manual: true,
     onSuccess(result) {
       const { username, nickname } = result;
-      store.userStore.setUserData({ username, nickname });
+      dispatch(loginReducer({ username, nickname }));
     },
     onFinally() {
       setHasUserData(true);
