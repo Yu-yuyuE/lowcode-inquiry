@@ -8,6 +8,9 @@ module.exports = merge(config, {
         port: "8888",
         // 无法访问路由时（Cannot GET /login），查看此配置
         historyApiFallback: true,
+        proxy: {
+            '/api': 'http://localhost:3001',
+        },
     },
     devtool: 'source-map',
 });

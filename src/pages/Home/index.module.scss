@@ -1,17 +1,17 @@
-.h1 {
-  display: flex;
-  color: red;
-  justify-content: center;
-  background-color: black;
-}
+.container {
+    height: calc(100vh - 91.5px - 70px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: linear-gradient(to right, #a1c7dc 0%, #d9e9f1 100%);
 
-h1 {
-  display: flex;
-  color: red;
-  justify-content: center;
-  background-color: black;
-}
+    .info {
+        text-align: center;
 
-.h1:hover {
-  background-color: yellow;
+        button {
+            height: 60px;
+            font-size: 24px;
+        }
+    }
 }
