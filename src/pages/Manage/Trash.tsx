@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import "./index.less";
+import "./index.module.scss";
 
 interface TrashProps {}
 

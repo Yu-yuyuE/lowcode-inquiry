@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import "./index.less";
+import styles from "./index.module.scss";
 
 interface RegisterProps {}
 

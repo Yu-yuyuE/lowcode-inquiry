@@ -1,9 +1,9 @@
 import { MainLayout, ManageLayout, QuestionLayout } from "@/layout";
 import { Home, Login, Manage, NotFound, Register, Star, Trash, List, Edit, Stat } from "@/pages";
 import React from "react";
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter, createHashRouter, Navigate } from "react-router-dom";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <MainLayout />,

@@ -13,9 +13,20 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            title: "react-demo",
+            title: "lowcode-inquiry",
             template: path.join(__dirname, "../public/index.html"),
-            filename: "index.html"
+            filename: "index.html",
+            hash: true,
+            cache: false,
+            inject: true,
+            minify: {
+                removeComments: true,
+                removeAttributeQuotes: true,
+                collapseWhitespace: true,
+                minifyJS: true, // 在脚本元素和事件属性中缩小JavaScript(使用UglifyJS)
+                minifyCSS: true // 缩小CSS样式元素和样式属性
+            },
+            nodeModules: path.resolve(__dirname, '../node_modules')
         }),
         new CleanWebpackPlugin(),
         new MiniCssExtractPlugin(),
