@@ -1,6 +1,6 @@
 import axios, { ResDataType } from "./ajax";
 
-// 获取用户信息
+// 获取用户信息，通过cookie中的token确定身份
 export async function getUserInfoService(): Promise<ResDataType> {
   const url = "/api/user/info";
   const data = (await axios.get(url)) as ResDataType;

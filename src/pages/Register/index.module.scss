@@ -1,0 +1,10 @@
+.container {
+    height: calc(100vh - 91.5px - 70px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .registerForm {
+        width: 450px;
+    }
+}

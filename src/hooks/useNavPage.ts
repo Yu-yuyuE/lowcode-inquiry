@@ -25,9 +25,7 @@ function useNavPage(isWaitingUserData: boolean) {
       return;
     }
     // 如果页面需要登录信息，跳转到登录页
-    if (isNoNeedUserInfo(pathname)) {
-      return;
-    } else {
+    if (!isNoNeedUserInfo(pathname)) {
       nav(LOGIN_PATHNAME);
     }
   }, [username, pathname, isWaitingUserData]);

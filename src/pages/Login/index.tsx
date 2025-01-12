@@ -9,10 +9,12 @@ import {
   deleteUserFromStorage,
   getUserInfoFromStorage,
   rememberUser,
+  setCookie,
   setToken,
+  USER_TOKEN_KEY,
 } from "@/utils/user-token";
 import { useRequest } from "ahooks";
-import { MANAGE_INDEX_PATHNAME } from "@/router";
+import { MANAGE_INDEX_PATHNAME, REGISTER_PATHNAME } from "@/router";
 
 const { Item } = Form;
 
@@ -38,6 +40,8 @@ const Login: FunctionComponent<LoginProps> = () => {
       onSuccess(result) {
         const { token = "" } = result;
         setToken(token); // 存储 token
+
+        setCookie(USER_TOKEN_KEY, token);
 
         Message.success("登录成功");
         nav(MANAGE_INDEX_PATHNAME); // 导航到“我的问卷”
@@ -85,9 +89,14 @@ const Login: FunctionComponent<LoginProps> = () => {
             <Checkbox>记住我</Checkbox>
           </Item>
           <Item wrapperCol={{ offset: 5 }}>
-            <Button type="primary" htmlType="submit">
-              登录
-            </Button>
+            <Space>
+              <Button type="primary" htmlType="submit">
+                登录
+              </Button>
+              <Button type="primary" onClick={() => nav(REGISTER_PATHNAME)}>
+                注册
+              </Button>
+            </Space>
           </Item>
         </Form>
       </div>

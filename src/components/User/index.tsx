@@ -1,7 +1,7 @@
 import { useGetUserInfo } from "@/hooks";
 import { LOGIN_PATHNAME } from "@/router";
 import { logoutReducer } from "@/store/userReducer";
-import { removeToken } from "@/utils/user-token";
+import { removeCookie, removeToken, USER_TOKEN_KEY } from "@/utils/user-token";
 import { Button, Link, Message, Space } from "@arco-design/web-react";
 import { IconUser } from "@arco-design/web-react/icon";
 import React, { FunctionComponent } from "react";
@@ -18,6 +18,7 @@ const User: FunctionComponent<UserProps> = () => {
   function logout() {
     dispatch(logoutReducer()); // 清空了 user 数据
     removeToken(); // 清除 token 的存储
+    removeCookie(USER_TOKEN_KEY); // 清除 token 的存储
     Message.success("退出成功");
     nav(LOGIN_PATHNAME);
   }
