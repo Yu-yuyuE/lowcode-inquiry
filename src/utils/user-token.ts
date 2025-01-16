@@ -37,7 +37,7 @@ export function getUserInfoFromStorage() {
 }
 
 // 添加cookie
-export function setCookie(key: string, value: string | undefined, maxAge?: number) {
+export function setCookie(key: string, value: string, maxAge?: number) {
   // 在设置cookie前进行编码操作。
   value = encodeURIComponent(value);
   if (maxAge) {
@@ -68,7 +68,7 @@ export function getCookie(key: string) {
 // 删除cookie
 export function removeCookie(key: string) {
   var value = getCookie(key);
-  setCookie(key, value, -60000);
+  setCookie(key, value as string, -60000);
 }
 
 // 清空cookie
