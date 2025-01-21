@@ -1,6 +1,7 @@
 import React, { FunctionComponent } from "react";
 import styles from "./index.module.scss";
 import EditHeader from "./EditHeader";
+import LeftPanel from "./LeftPanel";
 
 interface EditProps {}
 
@@ -10,7 +11,9 @@ const Edit: FunctionComponent<EditProps> = () => {
       <EditHeader />
       <div className={styles["content-wrapper"]}>
         <div className={styles.content}>
-          <div className={styles.left}>left</div>
+          <div className={styles.left}>
+            <LeftPanel />
+          </div>
           <div className={styles.main}>
             <div className={styles["canvas-wrapper"]}>middle</div>
           </div>

@@ -19,6 +19,7 @@ import {
   IconDown,
   IconEyeInvisible,
   IconLock,
+  IconPaste,
   IconRedo,
   IconUp,
 } from "@arco-design/web-react/icon";
@@ -97,7 +98,7 @@ const EditToolbar = () => {
       <Tooltip content="粘贴">
         <Button
           shape="circle"
-          icon={<IconCodeBlock />}
+          icon={<IconPaste />}
           onClick={paste}
           disabled={copiedComponent == null}></Button>
       </Tooltip>
