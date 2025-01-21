@@ -23,9 +23,18 @@ export async function getQuestionListService(
   return data;
 }
 
-// 更新单个问卷
-export async function updateQuestionService(opt: { [key: string]: any }): Promise<ResDataType> {
+// 更新多个问卷，用于删除和恢复
+export async function batchUpdateQuestionService(opt: {
+  [key: string]: any;
+}): Promise<ResDataType> {
   const url = `/api/question`;
+  const data = (await axios.patch(url, opt)) as ResDataType;
+  return data;
+}
+
+// 更新单个问卷
+export async function updateQuestionService(id, opt: { [key: string]: any }): Promise<ResDataType> {
+  const url = `/api/question/${id}`;
   const data = (await axios.patch(url, opt)) as ResDataType;
   return data;
 }

@@ -48,17 +48,16 @@ const router = createHashRouter([
       },
     ],
   },
-
   {
     path: "question",
     element: <QuestionLayout />,
     children: [
       {
-        path: "edit:id",
+        path: "edit/:id",
         element: <Edit />,
       },
       {
-        path: "stat:id",
+        path: "stat/:id",
         element: <Stat />,
       },
     ],

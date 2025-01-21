@@ -12,7 +12,7 @@ import {
 } from "@arco-design/web-react";
 import { useRequest, useTitle } from "ahooks";
 import { useLoadQuestionListData } from "@/hooks/useLoadQuestionListData";
-import { deleteQuestionsService, updateQuestionService } from "@/services/question";
+import { batchUpdateQuestionService, deleteQuestionsService } from "@/services/question";
 import { IconDelete } from "@arco-design/web-react/icon";
 
 const { confirm } = Modal;
@@ -52,7 +52,7 @@ const Trash: FunctionComponent<TrashProps> = () => {
   // 恢复
   const { run: recover } = useRequest(
     async () => {
-      await updateQuestionService({ isDeleted: false, ids: selectedIds });
+      await batchUpdateQuestionService({ isDeleted: false, ids: selectedIds });
     },
     {
       manual: true,
