@@ -39,11 +39,11 @@ export type ComponentConfType = {
 const componentConfList: ComponentConfType[] = [
   QuestionInputConf,
   QuestionTitleConf,
-  //   QuestionParagraphConf,
-  //   QuestionInfoConf,
+  QuestionParagraphConf,
+  QuestionInfoConf,
   QuestionTextareaConf,
-  //   QuestionRadioConf,
-  //   QuestionCheckboxConf,
+  QuestionRadioConf,
+  QuestionCheckboxConf,
 ];
 
 export function getComponentConfByType(type: string) {
@@ -55,18 +55,16 @@ export const componentConfGroup = [
   {
     groupId: "textGroup",
     groupName: "文本显示",
-    // components: [QuestionTitleConf, QuestionParagraphConf, QuestionInfoConf],
-    components: [QuestionTitleConf],
+    components: [QuestionTitleConf, QuestionParagraphConf, QuestionInfoConf],
   },
   {
     groupId: "inputGroup",
     groupName: "用户输入",
-    //   components: [QuestionInputConf, QuestionTextareaConf],
     components: [QuestionInputConf, QuestionTextareaConf],
   },
-  //   {
-  //     groupId: "chooseGroup",
-  //     groupName: "用户选择",
-  //     components: [QuestionRadioConf, QuestionCheckboxConf],
-  //   },
+  {
+    groupId: "chooseGroup",
+    groupName: "用户选择",
+    components: [QuestionRadioConf, QuestionCheckboxConf],
+  },
 ];

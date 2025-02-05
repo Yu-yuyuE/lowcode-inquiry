@@ -15,6 +15,7 @@ import {
   IconBackward,
   IconCodeBlock,
   IconCopy,
+  IconDelete,
   IconDesktop,
   IconDown,
   IconEyeInvisible,
@@ -80,7 +81,7 @@ const EditToolbar = () => {
   return (
     <Space>
       <Tooltip content="删除">
-        <Button shape="circle" icon={<IconDesktop />} onClick={handleDelete}></Button>
+        <Button shape="circle" icon={<IconDelete />} onClick={handleDelete}></Button>
       </Tooltip>
       <Tooltip content="隐藏">
         <Button shape="circle" icon={<IconEyeInvisible />} onClick={handleHidden}></Button>

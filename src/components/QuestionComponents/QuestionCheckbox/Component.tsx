@@ -5,7 +5,12 @@ import { Checkbox, Space, Typography } from "@arco-design/web-react";
 const { Paragraph } = Typography;
 
 const Component: FC<QuestionCheckboxPropsType> = (props: QuestionCheckboxPropsType) => {
-  const { title, isVertical, list = [] } = { ...QuestionCheckboxDefaultProps, ...props };
+  const {
+    title,
+    isVertical,
+    list = [],
+    defaultChecked = [],
+  } = { ...QuestionCheckboxDefaultProps, ...props };
 
   return (
     <div>
@@ -14,7 +19,7 @@ const Component: FC<QuestionCheckboxPropsType> = (props: QuestionCheckboxPropsTy
         {list.map(opt => {
           const { value, text, checked } = opt;
           return (
-            <Checkbox key={value} value={value} checked={checked}>
+            <Checkbox key={text} value={text} checked={defaultChecked.includes(text)}>
               {text}
             </Checkbox>
           );
