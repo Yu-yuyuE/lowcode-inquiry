@@ -34,7 +34,7 @@ const User: FunctionComponent<UserProps> = () => {
   );
 
   const Login = (
-    <Link style={{ color: "#f7f7f7" }} href={LOGIN_PATHNAME}>
+    <Link style={{ color: "#f7f7f7" }} onClick={() => nav(LOGIN_PATHNAME)}>
       登录
     </Link>
   );

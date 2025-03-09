@@ -30,8 +30,7 @@ const Login: FunctionComponent<LoginProps> = () => {
   }, []);
 
   const { run } = useRequest(
-    async () => {
-      const { username, password } = form.getFieldsValue();
+    async (username, password) => {
       const data = await loginService(username, password);
       return data;
     },
@@ -76,13 +75,30 @@ const Login: FunctionComponent<LoginProps> = () => {
           form={form}
           validateMessages={{
             required: (_, { label }) => `请输入${label}`,
-            string: { match: "只能是字母数字下划线,字符长度在 5-20 之间" },
           }}
           onSubmit={onSubmit}>
-          <Item field="username" label="用户名" rules={[{ required: true, match: /^\w{5,20}$/ }]}>
+          <Item
+            field="username"
+            label="用户名"
+            rules={[
+              {
+                required: true,
+                match: /^[a-zA-Z0-9#$%_-]{4,32}$/,
+                message: "用户名只能是字母、数字或者 #、$、%、_、- 这些字符",
+              },
+            ]}>
             <Input placeholder="请输入用户名" />
           </Item>
-          <Item field="password" label="密码" rules={[{ required: true }]}>
+          <Item
+            field="password"
+            label="密码"
+            rules={[
+              {
+                required: true,
+                match: /^[a-zA-Z0-9#$%_-]{6,32}$/,
+                message: "密码只能是字母、数字或者 #、$、%、_、- 这些字符，长度6-32位",
+              },
+            ]}>
             <Input.Password placeholder="请输入密码" />
           </Item>
           <Item field="remember" wrapperCol={{ offset: 5 }}>

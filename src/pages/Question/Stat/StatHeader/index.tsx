@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@arco-design/web-react";
 import { IconCopy, IconLeft, IconQrcode } from "@arco-design/web-react/icon";
+import { API_URL } from "@/constants";
 
 const { Title } = Typography;
 const StatHeader = () => {
@@ -33,7 +34,7 @@ const StatHeader = () => {
     if (!isPublished) return null;
 
     // 拼接 url ，需要参考 C 端的规则
-    const url = `http://localhost:3000/question/${id}`;
+    const url = `${API_URL}/question/${id}`;
 
     // 定义二维码组件
     const QRCodeElem = (

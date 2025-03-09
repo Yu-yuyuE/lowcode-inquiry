@@ -1,24 +1,27 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, useState } from "react";
 import styles from "./index.module.scss";
 import { Button, Checkbox, Form, Input, Message, Space } from "@arco-design/web-react";
 import { IconUserAdd } from "@arco-design/web-react/icon";
 import { useRequest } from "ahooks";
-import { registerService } from "@/services/userinfo";
+import { captchaService, registerService } from "@/services/userinfo";
 import { useNavigate } from "react-router-dom";
 import { LOGIN_PATHNAME } from "@/router";
+import { EMAIL_ADDRESS_REG } from "@/constants";
 
 const Item = Form.Item;
 
 interface RegisterProps {}
 
 const Register: FunctionComponent<RegisterProps> = () => {
+  const [isWaitingCaptcha, setWaitingCaptcha] = useState(false);
+  const [waitingTime, setWaitingTime] = useState(60);
   const nav = useNavigate();
   const [form] = Form.useForm();
 
-  const { run } = useRequest(
+  const { run: login } = useRequest(
     async () => {
-      const { username, password } = form.getFieldsValue();
-      return await registerService(username, password);
+      const { username, password, nickname, email, captcha } = form.getFieldsValue();
+      return await registerService({ username, password, nickname, email, captcha });
     },
     {
       manual: true,
@@ -29,9 +32,43 @@ const Register: FunctionComponent<RegisterProps> = () => {
     },
   );
 
+  const { run: getCaptcha } = useRequest(
+    async () => {
+      const { email } = form.getFieldsValue();
+      return await captchaService({ email });
+    },
+    {
+      manual: true,
+      onSuccess() {
+        Message.success("验证码发送成功");
+      },
+    },
+  );
+
   const onSubmit = () => {
-    run();
+    login();
   };
+
+  const onCaptcha = async () => {
+    try {
+      await form.validate(["email"]);
+    } catch (error) {
+      return;
+    }
+    setWaitingCaptcha(true);
+    getCaptcha();
+    const interval = setInterval(() => {
+      setWaitingTime(time => {
+        if (time === 0) {
+          setWaitingCaptcha(false);
+          clearInterval(interval);
+          return 60;
+        }
+        return time - 1;
+      });
+    }, 1000);
+  };
+
   return (
     <div className={styles.container}>
       <div>
@@ -47,13 +84,41 @@ const Register: FunctionComponent<RegisterProps> = () => {
           form={form}
           validateMessages={{
             required: (_, { label }) => `请输入${label}`,
-            string: { match: "只能是字母数字下划线,字符长度在 5-20 之间" },
           }}
           onSubmit={onSubmit}>
-          <Item field="username" label="用户名" rules={[{ required: true, match: /^\w{5,20}$/ }]}>
+          <Item
+            field="username"
+            label="用户名"
+            rules={[
+              {
+                required: true,
+                match: /^[a-zA-Z0-9#$%_-]{4,32}$/,
+                message: "用户名只能是字母、数字或者 #、$、%、_、- 这些字符",
+              },
+            ]}>
             <Input placeholder="请输入用户名" />
           </Item>
-          <Item field="password" label="密码" rules={[{ required: true }]}>
+          <Item
+            field="nickname"
+            label="昵称"
+            rules={[
+              {
+                match: /^[a-zA-Z0-9一-龟#$%_-]{1,32}$/,
+                message: "昵称只能是字母、数字、中文汉字或者 #、$、%、_、- 这些字符",
+              },
+            ]}>
+            <Input placeholder="请输入昵称" />
+          </Item>
+          <Item
+            field="password"
+            label="密码"
+            rules={[
+              {
+                required: true,
+                match: /^[a-zA-Z0-9#$%_-]{6,32}$/,
+                message: "密码只能是字母、数字或者 #、$、%、_、- 这些字符，长度6-32位",
+              },
+            ]}>
             <Input.Password placeholder="请输入密码" />
           </Item>
           <Item
@@ -73,6 +138,37 @@ const Register: FunctionComponent<RegisterProps> = () => {
               },
             ]}>
             <Input.Password placeholder="请再次输入密码" />
+          </Item>
+          <Item
+            field="email"
+            label="邮箱"
+            rules={[
+              {
+                required: true,
+                match: EMAIL_ADDRESS_REG,
+                message: "邮箱地址不合法",
+              },
+            ]}>
+            <Input placeholder="请输入邮箱地址" />
+          </Item>
+          <Item
+            field="captcha"
+            label="验证码"
+            rules={[
+              {
+                required: true,
+              },
+            ]}>
+            <Input
+              className="captcha-input"
+              placeholder="请输入验证码"
+              style={{ flex: 1, marginRight: 8 }}
+              addAfter={
+                <Button type="text" disabled={isWaitingCaptcha} onClick={onCaptcha}>
+                  {isWaitingCaptcha ? `${waitingTime}秒后重新获取` : "获取验证码"}
+                </Button>
+              }
+            />
           </Item>
           {/* <Item field="remember" wrapperCol={{ offset: 5 }}>
             <Checkbox>记住我</Checkbox>
