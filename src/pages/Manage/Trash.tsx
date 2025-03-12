@@ -38,6 +38,7 @@ const columns: TableColumnProps[] = [
   {
     title: "创建时间",
     dataIndex: "createdAt",
+    render: col => `${new Date(col).toLocaleDateString()} ${new Date(col).toLocaleTimeString()}`,
   },
 ];
 
@@ -48,7 +49,7 @@ const Trash: FunctionComponent<TrashProps> = () => {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const { data = {}, loading, refresh } = useLoadQuestionListData({ isDeleted: true });
-  const { list = [], total = 0 } = data;
+  const { records = [], total = 0 } = data;
   // 恢复
   const { run: recover } = useRequest(
     async () => {
@@ -59,8 +60,10 @@ const Trash: FunctionComponent<TrashProps> = () => {
       debounceWait: 500, // 防抖
       onSuccess() {
         Message.success("恢复成功");
-        refresh(); // 手动刷新列表
-        setSelectedIds([]);
+        setTimeout(() => {
+          refresh();
+          setSelectedIds([]);
+        }, 1000);
       },
     },
   );
@@ -71,8 +74,10 @@ const Trash: FunctionComponent<TrashProps> = () => {
       manual: true,
       onSuccess() {
         Message.success("删除成功");
-        refresh();
-        setSelectedIds([]);
+        setTimeout(() => {
+          refresh();
+          setSelectedIds([]);
+        }, 1000);
       },
     },
   );
@@ -109,9 +114,9 @@ const Trash: FunctionComponent<TrashProps> = () => {
             </Button>
           </Space>
           <Table
-            rowKey="_id"
+            rowKey="id"
             columns={columns}
-            data={list}
+            data={records}
             rowSelection={{
               type: "checkbox",
               onChange: selectedRowKeys => {

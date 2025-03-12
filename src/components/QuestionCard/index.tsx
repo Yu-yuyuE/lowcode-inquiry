@@ -22,7 +22,7 @@ import {
 } from "@arco-design/web-react/icon";
 
 type PropsType = {
-  _id: string;
+  id: string;
   title: string;
   isPublished: boolean;
   isStar: boolean;
@@ -38,13 +38,13 @@ const IconFont = Icon.addFromIconFontCn({
 function QuestionCard(props: PropsType) {
   const nav = useNavigate();
 
-  const { _id, title, createdAt, answerCount, isPublished, isStar } = props;
+  const { id, title, createdAt, answerCount, isPublished, isStar } = props;
 
   // 修改 标星
   const [isStarState, setIsStarState] = useState(isStar);
   const { loading: changeStarLoading, run: changeStar } = useRequest(
     async () => {
-      await updateQuestionService(_id, { isStar: !isStarState });
+      await updateQuestionService(id, { isStar: !isStarState });
     },
     {
       manual: true,
@@ -57,7 +57,7 @@ function QuestionCard(props: PropsType) {
 
   // 复制
   const { loading: duplicateLoading, run: duplicate } = useRequest(
-    async () => await duplicateQuestionService(_id),
+    async () => await duplicateQuestionService(id),
     {
       manual: true,
       onSuccess(result) {
@@ -70,7 +70,7 @@ function QuestionCard(props: PropsType) {
   // 删除
   const [isDeletedState, setIsDeletedState] = useState(false);
   const { loading: deleteLoading, run: deleteQuestion } = useRequest(
-    async () => await updateQuestionService(_id, { isDeleted: true }),
+    async () => await updateQuestionService(id, { isDeleted: true }),
     {
       manual: true,
       onSuccess() {
@@ -93,7 +93,7 @@ function QuestionCard(props: PropsType) {
     <div className={styles.container}>
       <div className={styles.title}>
         <div className={styles.left}>
-          <Link to={isPublished ? `/question/stat/${_id}` : `/question/edit/${_id}`}>
+          <Link to={isPublished ? `/question/stat/${id}` : `/question/edit/${id}`}>
             <Space>
               {isStarState && <IconStar style={{ color: "orange" }} />}
               {title}
@@ -104,7 +104,9 @@ function QuestionCard(props: PropsType) {
           <Space>
             {isPublished ? <Tag color="green">已发布</Tag> : <Tag>未发布</Tag>}
             <span>答卷: {answerCount}</span>
-            <span>{createdAt}</span>
+            <span>
+              {`${new Date(createdAt).toLocaleDateString()} ${new Date(createdAt).toLocaleTimeString()}`}
+            </span>
           </Space>
         </div>
       </div>
@@ -116,14 +118,14 @@ function QuestionCard(props: PropsType) {
               icon={<IconEdit />}
               type="text"
               size="small"
-              onClick={() => nav(`/question/edit/${_id}`)}>
+              onClick={() => nav(`/question/edit/${id}`)}>
               编辑问卷
             </Button>
             <Button
               icon={<IconFont type="icon-line-chart-line" />}
               type="text"
               size="small"
-              onClick={() => nav(`/question/stat/${_id}`)}
+              onClick={() => nav(`/question/stat/${id}`)}
               disabled={!isPublished}>
               问卷统计
             </Button>

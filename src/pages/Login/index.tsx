@@ -15,6 +15,8 @@ import {
 } from "@/utils/user-token";
 import { useRequest } from "ahooks";
 import { MANAGE_INDEX_PATHNAME, REGISTER_PATHNAME } from "@/router";
+import { useDispatch } from "react-redux";
+import { loginReducer } from "@/store/userReducer";
 
 const { Item } = Form;
 
@@ -23,6 +25,7 @@ interface LoginProps {}
 const Login: FunctionComponent<LoginProps> = () => {
   const nav = useNavigate();
   const [form] = Form.useForm();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const { username, password } = getUserInfoFromStorage();
@@ -37,11 +40,14 @@ const Login: FunctionComponent<LoginProps> = () => {
     {
       manual: true,
       onSuccess(result) {
-        const { token = "" } = result;
+        const {
+          token = "",
+          userInfo: { username, nickname },
+        } = result;
+
         setToken(token); // 存储 token
-
         setCookie(USER_TOKEN_KEY, token);
-
+        dispatch(loginReducer({ username, nickname }));
         Message.success("登录成功");
         nav(MANAGE_INDEX_PATHNAME); // 导航到“我的问卷”
       },

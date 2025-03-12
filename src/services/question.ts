@@ -10,7 +10,7 @@ type SearchOption = {
 
 // 创建问卷
 export async function createQuestionService(): Promise<ResDataType> {
-  const url = `${API_URL}/question`;
+  const url = `${API_URL}/question/create`;
   const data = (await axios.post(url)) as ResDataType;
   return data;
 }
@@ -19,8 +19,10 @@ export async function createQuestionService(): Promise<ResDataType> {
 export async function getQuestionListService(
   opt: Partial<SearchOption> = {},
 ): Promise<ResDataType> {
-  const url = `${API_URL}/question`;
-  const data = (await axios.get(url, { params: opt })) as ResDataType;
+  const url = `${API_URL}/question/list`;
+  const data = (await axios.get(url, {
+    params: opt,
+  })) as ResDataType;
   return data;
 }
 
@@ -28,14 +30,14 @@ export async function getQuestionListService(
 export async function batchUpdateQuestionService(opt: {
   [key: string]: any;
 }): Promise<ResDataType> {
-  const url = `${API_URL}/question`;
+  const url = `${API_URL}/question/update`;
   const data = (await axios.patch(url, opt)) as ResDataType;
   return data;
 }
 
 // 更新单个问卷
 export async function updateQuestionService(id, opt: { [key: string]: any }): Promise<ResDataType> {
-  const url = `${API_URL}/question/${id}`;
+  const url = `${API_URL}/question/update/${id}`;
   const data = (await axios.patch(url, opt)) as ResDataType;
   return data;
 }
@@ -49,7 +51,7 @@ export async function duplicateQuestionService(id: string): Promise<ResDataType>
 
 // 批量彻底删除
 export async function deleteQuestionsService(ids: string[]): Promise<ResDataType> {
-  const url = `${API_URL}/question`;
+  const url = `${API_URL}/question/delete`;
   const data = (await axios.delete(url, { data: { ids } })) as ResDataType;
   return data;
 }

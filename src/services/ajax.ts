@@ -1,9 +1,10 @@
 import axios from "axios";
-import { getToken } from "@/utils/user-token";
+import router, { LOGIN_PATHNAME } from "@/router";
+import { getToken, removeCookie, removeToken, USER_TOKEN_KEY } from "@/utils/user-token";
 import { Message } from "@arco-design/web-react";
 
 const instance = axios.create({
-  timeout: 10 * 1000,
+  timeout: 30 * 1000,
 });
 
 // request 拦截：每次请求都带上 token
@@ -16,28 +17,49 @@ instance.interceptors.request.use(
 );
 
 // response 拦截：统一处理 error 和 msg
-instance.interceptors.response.use(res => {
-  const resData = (res.data || {}) as ResType;
-  const { errno, data, msg } = resData;
+instance.interceptors.response.use(
+  res => {
+    const resData = (res.data || {}) as ResType;
+    const { error, statusCode, message, data } = resData;
 
-  if (errno) {
-    // 错误提示
-    if (msg) {
-      Message.error(msg);
+    if (error) {
+      // 错误提示
+      if (message) {
+        Message.error(message);
+      }
+
+      throw new Error(message);
     }
 
-    throw new Error(msg);
-  }
+    return data as any;
+  },
+  err => {
+    const { error, statusCode, message } = err.response.data as ResType;
+    if (statusCode === 401) {
+      removeToken(); // 清除无效token
+      removeCookie(USER_TOKEN_KEY);
+      router.navigate(LOGIN_PATHNAME);
+      throw new Error(message);
+    }
 
-  return data as any;
-});
+    if (err) {
+      // 错误提示
+      if (message) {
+        Message.error(message);
+      }
+
+      throw new Error(message);
+    }
+  },
+);
 
 export default instance;
 
 export type ResType = {
-  errno: number;
+  statusCode: number;
   data?: ResDataType;
-  msg?: string;
+  message?: string;
+  error?: string;
 };
 
 export type ResDataType = {
