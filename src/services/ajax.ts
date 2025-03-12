@@ -1,6 +1,6 @@
 import axios from "axios";
 import router, { LOGIN_PATHNAME } from "@/router";
-import { getToken, removeCookie, removeToken, USER_TOKEN_KEY } from "@/utils/user-token";
+import { getToken, removeCookie, removeToken, setToken, USER_TOKEN_KEY } from "@/utils/user-token";
 import { Message } from "@arco-design/web-react";
 
 const instance = axios.create({
@@ -21,6 +21,10 @@ instance.interceptors.response.use(
   res => {
     const resData = (res.data || {}) as ResType;
     const { error, statusCode, message, data } = resData;
+
+    if (res.headers.token) {
+      setToken(res.headers.token);
+    }
 
     if (error) {
       // 错误提示
