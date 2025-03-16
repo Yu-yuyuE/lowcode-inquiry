@@ -111,9 +111,9 @@ const RelationAction: FunctionComponent<RelationActionProps> = ({
             placeholder="关联表单项"
             options={componentList
               .filter(com => com.fe_id !== selectedComponent?.fe_id)
-              .map(({ title, fe_id }) => ({
+              .map(({ props: { title, text }, fe_id }) => ({
                 value: fe_id,
-                label: title || "",
+                label: title || text || "",
               }))}></Select>
         </Form.Item>
         会
