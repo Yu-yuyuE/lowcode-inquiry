@@ -1,0 +1,25 @@
+.container {
+    width: 100vw;
+    max-width: 450px;
+    min-width: 375px;
+    height: 100vh;
+    overflow: auto;
+    box-shadow: 0 2px 10px #0000001f;
+    margin: 0 auto;
+    position: relative;
+
+    .header-container {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 24px;
+        background-color: #28566f;
+        h1 {
+            color: #f7f7f7;
+            font-size: 20px;
+        }
+    }
+    
+    .canvas-wrapper {
+        width: 100%;
+    }
+}

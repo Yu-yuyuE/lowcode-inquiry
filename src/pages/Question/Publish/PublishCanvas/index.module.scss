@@ -1,0 +1,24 @@
+.container {
+    overflow: hidden;
+    margin-bottom: 50px;
+
+    .form-item-container {
+        margin: 0 12px;
+        padding: 12px;
+        width: auto !important;
+    }
+
+    .component-wrapper {
+        margin: 0 12px;
+        padding: 12px;
+    }
+
+    .footer-btn {
+        height: 50px !important;
+        width: 100vw;
+        max-width: 450px;
+        min-width: 375px;
+        position: fixed;
+        bottom: 0;
+    }
+}

@@ -20,7 +20,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   res => {
     const resData = (res.data || {}) as ResType;
-    const { error, statusCode, message, data } = resData;
+    const { error, message, data } = resData;
 
     if (res.headers.token) {
       setToken(res.headers.token);
@@ -38,8 +38,8 @@ instance.interceptors.response.use(
     return data as any;
   },
   err => {
-    const { error, statusCode, message } = err.response.data as ResType;
-    if (statusCode === 401) {
+    const { error, code, message } = err.response.data as ResType;
+    if (code === 401) {
       removeToken(); // 清除无效token
       removeCookie(USER_TOKEN_KEY);
       router.navigate(LOGIN_PATHNAME);
@@ -60,7 +60,7 @@ instance.interceptors.response.use(
 export default instance;
 
 export type ResType = {
-  statusCode: number;
+  code: number;
   data?: ResDataType;
   message?: string;
   error?: string;

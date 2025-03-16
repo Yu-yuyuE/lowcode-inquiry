@@ -1,5 +1,17 @@
 import { MainLayout, ManageLayout, QuestionLayout } from "@/layout";
-import { Home, Login, Manage, NotFound, Register, Star, Trash, List, Edit, Stat } from "@/pages";
+import {
+  Home,
+  Login,
+  Manage,
+  NotFound,
+  Register,
+  Star,
+  Trash,
+  List,
+  Edit,
+  Stat,
+  Publish,
+} from "@/pages";
 import React from "react";
 import { createBrowserRouter, createHashRouter, Navigate } from "react-router-dom";
 
@@ -52,6 +64,10 @@ const router = createHashRouter([
     path: "question",
     element: <QuestionLayout />,
     children: [
+      {
+        path: "publish/:id",
+        element: <Publish />,
+      },
       {
         path: "edit/:id",
         element: <Edit />,

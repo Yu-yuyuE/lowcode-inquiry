@@ -17,6 +17,7 @@ import {
   IconCopy,
   IconDelete,
   IconEdit,
+  IconFindReplace,
   IconInfoCircle,
   IconStar,
 } from "@arco-design/web-react/icon";
@@ -119,7 +120,14 @@ function QuestionCard(props: PropsType) {
               type="text"
               size="small"
               onClick={() => nav(`/question/edit/${id}`)}>
-              编辑问卷
+              编辑
+            </Button>
+            <Button
+              icon={<IconFindReplace />}
+              type="text"
+              size="small"
+              onClick={() => nav(`/question/publish/${id}`)}>
+              预览
             </Button>
             <Button
               icon={<IconFont type="icon-line-chart-line" />}
@@ -127,7 +135,7 @@ function QuestionCard(props: PropsType) {
               size="small"
               onClick={() => nav(`/question/stat/${id}`)}
               disabled={!isPublished}>
-              问卷统计
+              统计
             </Button>
           </Space>
         </div>
