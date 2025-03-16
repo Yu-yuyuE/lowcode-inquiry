@@ -3,12 +3,12 @@ import { QuestionSelectPropsType } from "./interface";
 import { Button, Form, Input, Select, Space } from "@arco-design/web-react";
 import { IconMinusCircle, IconPlusCircle } from "@arco-design/web-react/icon";
 import { OptionType } from "../QuestionRadio";
-import { useGetComponentInfo } from "@/hooks";
 import { RelationAction } from "@/components";
-import { actionOptions } from "@/components/RelationAction";
+import { RelationActionEnum, RelationSymbolEnum } from "@/components/RelationAction";
+import { useGetComponentInfo } from "@/hooks";
 
 const PropComponent: FC<QuestionSelectPropsType> = (props: QuestionSelectPropsType) => {
-  const { componentList } = useGetComponentInfo();
+  const { componentList, selectedComponent } = useGetComponentInfo();
   const {
     title,
     placeholder,
@@ -27,7 +27,7 @@ const PropComponent: FC<QuestionSelectPropsType> = (props: QuestionSelectPropsTy
   function handleValuesChange() {
     if (onChange == null) return;
     // 触发 onChange 函数
-    const newValues = form.getFieldsValue() as QuestionSelectPropsType;
+    const newValues = form.getFields() as QuestionSelectPropsType;
 
     if (newValues.options) {
       // 需要清除 text undefined 的选项
@@ -42,7 +42,7 @@ const PropComponent: FC<QuestionSelectPropsType> = (props: QuestionSelectPropsTy
       layout="vertical"
       initialValues={{ title, placeholder }}
       form={form}
-      onValuesChange={handleValuesChange}
+      onChange={handleValuesChange}
       disabled={disabled}>
       <Form.Item label="标题" field="title" rules={[{ required: true, message: "请输入标题" }]}>
         <Input />
@@ -53,14 +53,15 @@ const PropComponent: FC<QuestionSelectPropsType> = (props: QuestionSelectPropsTy
       <Form.Item label="选项列表">
         <Form.List field="options">
           {(fields, { add, remove }) => (
-            <>
+            <div style={{ padding: "12px", backgroundColor: "rgb(250, 250, 250)" }}>
               {/* 遍历所有的选项（可删除） */}
               {fields.map(({ key, field }, index) => {
                 return (
-                  <Form.Item key={key} noStyle>
+                  <Form.Item key={key}>
                     <Space align="baseline">
                       {/* 当前选项 输入框 */}
                       <Form.Item
+                        noStyle
                         field={field + ".text"}
                         rules={[
                           { required: true, message: "请输入选项标题" },
@@ -76,7 +77,7 @@ const PropComponent: FC<QuestionSelectPropsType> = (props: QuestionSelectPropsTy
                             },
                           },
                         ]}>
-                        <Input placeholder="输入选项文字..." />
+                        <Input placeholder="输入选项文字..." style={{ width: 250 }} />
                       </Form.Item>
 
                       {/* 当前选项 删除按钮 */}
@@ -87,12 +88,12 @@ const PropComponent: FC<QuestionSelectPropsType> = (props: QuestionSelectPropsTy
               })}
 
               {/* 添加选项 */}
-              <Form.Item>
+              <Form.Item noStyle>
                 <Button type="text" onClick={() => add({ text: "" })} icon={<IconPlusCircle />}>
                   添加选项
                 </Button>
               </Form.Item>
-            </>
+            </div>
           )}
         </Form.List>
       </Form.Item>
@@ -107,45 +108,38 @@ const PropComponent: FC<QuestionSelectPropsType> = (props: QuestionSelectPropsTy
       <Form.Item label="关联项">
         <Form.List field="relations">
           {(fields, { add, remove }) => (
-            <>
+            <div style={{ padding: "12px", backgroundColor: "rgb(250, 250, 250)" }}>
               {(fields ?? []).map(({ key, field }, index) => {
                 return (
-                  <Form.Item key={key} noStyle>
-                    <Space align="baseline">
-                      <Form.Item
-                        label="命中值"
-                        field={field + ".targetValue"}
-                        rules={[{ required: true, message: "请选择命中值" }]}>
-                        <Select
-                          placeholder="选择命中值时，触发关联动作"
-                          value={defaultChecked}
-                          options={options.map(({ text, value }) => ({
-                            value: text,
-                            label: text || "",
-                          }))}></Select>
-                      </Form.Item>
-                      <Form.Item
-                        label="关联动作"
-                        field={field + ".action"}
-                        rules={[{ required: true, message: "请选择关联动作" }]}>
-                        {/* @ts-ignore */}
-                        <RelationAction />
-                      </Form.Item>
-
-                      {/* 当前选项 删除按钮 */}
-                      {index > 1 && <IconMinusCircle onClick={() => remove(index)} />}
-                    </Space>
-                  </Form.Item>
+                  <RelationAction
+                    key={key}
+                    index={index}
+                    field={field}
+                    remove={remove}
+                    targetOptions={options}
+                  />
                 );
               })}
-
               {/* 添加选项 */}
-              <Form.Item>
-                <Button type="text" onClick={() => add({ text: "" })} icon={<IconPlusCircle />}>
-                  添加选项
+              <Form.Item noStyle>
+                <Button
+                  disabled={componentList.length <= 1}
+                  type="text"
+                  onClick={() =>
+                    add({
+                      targetValue: options[0]?.text ?? "",
+                      action: RelationActionEnum.SHOW,
+                      targetItem:
+                        componentList.filter(com => com.fe_id !== selectedComponent?.fe_id)[0]
+                          ?.fe_id ?? "",
+                      symbol: RelationSymbolEnum.EQUAL,
+                    })
+                  }
+                  icon={<IconPlusCircle />}>
+                  添加关联项
                 </Button>
               </Form.Item>
-            </>
+            </div>
           )}
         </Form.List>
       </Form.Item>

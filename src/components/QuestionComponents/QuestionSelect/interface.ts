@@ -1,3 +1,4 @@
+import { RelationActionEnum } from "@/components/RelationAction";
 import { OptionType } from "../QuestionRadio";
 
 export type QuestionSelectPropsType = {
@@ -8,7 +9,13 @@ export type QuestionSelectPropsType = {
   disabled?: boolean;
   options?: OptionType[];
   defaultChecked?: string;
-  relations?: string[];
+  relations?: RelationType[];
+};
+
+export type RelationType = {
+  targetValue: any;
+  action: RelationActionEnum;
+  targetItem: string;
 };
 
 export const QuestionSelectDefaultProps: QuestionSelectPropsType = {
@@ -19,6 +26,7 @@ export const QuestionSelectDefaultProps: QuestionSelectPropsType = {
     { value: "item2", text: "选项2" },
     { value: "item3", text: "选项3" },
   ],
+  relations: [],
 };
 
 // 统计组件的属性类型
