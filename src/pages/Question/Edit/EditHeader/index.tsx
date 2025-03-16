@@ -108,7 +108,12 @@ const PublishButton: FC = () => {
   );
 
   return (
-    <Button type="primary" onClick={pub} disabled={loading} icon={loading ? <IconLoading /> : null}>
+    <Button
+      type="primary"
+      status="success"
+      onClick={pub}
+      disabled={loading}
+      icon={loading ? <IconLoading /> : null}>
       发布
     </Button>
   );
@@ -116,6 +121,7 @@ const PublishButton: FC = () => {
 
 const EditHeader: FC = () => {
   const nav = useNavigate();
+  const { id } = useParams();
 
   return (
     <div className={styles["header-wrapper"]}>
@@ -134,6 +140,9 @@ const EditHeader: FC = () => {
         <div className={styles.right}>
           <Space>
             <SaveButton />
+            <Button type="primary" onClick={() => nav("/question/publish/" + id)}>
+              预览
+            </Button>
             <PublishButton />
           </Space>
         </div>

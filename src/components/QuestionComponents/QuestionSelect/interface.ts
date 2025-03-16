@@ -8,6 +8,7 @@ export type QuestionSelectPropsType = {
   disabled?: boolean;
   options?: OptionType[];
   defaultChecked?: string;
+  relations?: string[];
 };
 
 export const QuestionSelectDefaultProps: QuestionSelectPropsType = {

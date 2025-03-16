@@ -1,16 +1,28 @@
 import React, { FC, useEffect } from "react";
 import { QuestionSelectPropsType } from "./interface";
-import { Button, Form, Input, Space } from "@arco-design/web-react";
+import { Button, Form, Input, Select, Space } from "@arco-design/web-react";
 import { IconMinusCircle, IconPlusCircle } from "@arco-design/web-react/icon";
 import { OptionType } from "../QuestionRadio";
+import { useGetComponentInfo } from "@/hooks";
+import { RelationAction } from "@/components";
+import { actionOptions } from "@/components/RelationAction";
 
 const PropComponent: FC<QuestionSelectPropsType> = (props: QuestionSelectPropsType) => {
-  const { title, placeholder, onChange, disabled, options = [], defaultChecked } = props;
+  const { componentList } = useGetComponentInfo();
+  const {
+    title,
+    placeholder,
+    onChange,
+    disabled,
+    options = [],
+    defaultChecked,
+    relations = [],
+  } = props;
   const [form] = Form.useForm();
 
   useEffect(() => {
-    form.setFieldsValue({ title, placeholder, options, defaultChecked });
-  }, [title, placeholder, options, defaultChecked]);
+    form.setFieldsValue({ title, placeholder, options, defaultChecked, relations });
+  }, [title, placeholder, options, defaultChecked, relations]);
 
   function handleValuesChange() {
     if (onChange == null) return;
@@ -65,6 +77,59 @@ const PropComponent: FC<QuestionSelectPropsType> = (props: QuestionSelectPropsTy
                           },
                         ]}>
                         <Input placeholder="输入选项文字..." />
+                      </Form.Item>
+
+                      {/* 当前选项 删除按钮 */}
+                      {index > 1 && <IconMinusCircle onClick={() => remove(index)} />}
+                    </Space>
+                  </Form.Item>
+                );
+              })}
+
+              {/* 添加选项 */}
+              <Form.Item>
+                <Button type="text" onClick={() => add({ text: "" })} icon={<IconPlusCircle />}>
+                  添加选项
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
+      </Form.Item>
+      <Form.Item label="默认选中" field="defaultChecked">
+        <Select
+          value={defaultChecked}
+          options={options.map(({ text, value }) => ({
+            value: text,
+            label: text || "",
+          }))}></Select>
+      </Form.Item>
+      <Form.Item label="关联项">
+        <Form.List field="relations">
+          {(fields, { add, remove }) => (
+            <>
+              {(fields ?? []).map(({ key, field }, index) => {
+                return (
+                  <Form.Item key={key} noStyle>
+                    <Space align="baseline">
+                      <Form.Item
+                        label="命中值"
+                        field={field + ".targetValue"}
+                        rules={[{ required: true, message: "请选择命中值" }]}>
+                        <Select
+                          placeholder="选择命中值时，触发关联动作"
+                          value={defaultChecked}
+                          options={options.map(({ text, value }) => ({
+                            value: text,
+                            label: text || "",
+                          }))}></Select>
+                      </Form.Item>
+                      <Form.Item
+                        label="关联动作"
+                        field={field + ".action"}
+                        rules={[{ required: true, message: "请选择关联动作" }]}>
+                        {/* @ts-ignore */}
+                        <RelationAction />
                       </Form.Item>
 
                       {/* 当前选项 删除按钮 */}

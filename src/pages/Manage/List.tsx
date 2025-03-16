@@ -50,7 +50,6 @@ const List: FunctionComponent<ListProps> = ({ isStar }) => {
   );
 
   useEffect(() => {
-    console.log(page, pageSize, params);
     run();
   }, [page]);
 
