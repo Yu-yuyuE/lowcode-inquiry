@@ -9,6 +9,7 @@ interface RelationActionProps {
   field: string;
   targetOptions: any[];
   remove: (index: number) => void;
+  multiple: boolean;
 }
 
 export enum RelationActionEnum {
@@ -18,6 +19,8 @@ export enum RelationActionEnum {
 export enum RelationSymbolEnum {
   EQUAL = "equal",
   NOT_EQUAL = "not_equal",
+  CONTAIN = "contain",
+  NOT_CONTAIN = "not_contain",
 }
 export const actionOptions = [
   {
@@ -29,7 +32,7 @@ export const actionOptions = [
     value: RelationActionEnum.HIDE,
   },
 ];
-export const symbolOptions = [
+export const ratioSymbolOptions = [
   {
     label: "等于",
     value: RelationSymbolEnum.EQUAL,
@@ -39,12 +42,23 @@ export const symbolOptions = [
     value: RelationSymbolEnum.NOT_EQUAL,
   },
 ];
+export const checkboxSymbolOptions = [
+  {
+    label: "包含",
+    value: RelationSymbolEnum.CONTAIN,
+  },
+  {
+    label: "不包含",
+    value: RelationSymbolEnum.NOT_CONTAIN,
+  },
+];
 
 const RelationAction: FunctionComponent<RelationActionProps> = ({
   index,
   field,
   targetOptions,
   remove,
+  multiple,
 }) => {
   const { componentList, selectedComponent } = useGetComponentInfo();
   return (
@@ -63,7 +77,7 @@ const RelationAction: FunctionComponent<RelationActionProps> = ({
               position: "bottom",
             }}
             placeholder="关系符"
-            options={symbolOptions}></Select>
+            options={multiple ? checkboxSymbolOptions : ratioSymbolOptions}></Select>
         </Form.Item>
         <Form.Item
           field={field + ".targetValue"}

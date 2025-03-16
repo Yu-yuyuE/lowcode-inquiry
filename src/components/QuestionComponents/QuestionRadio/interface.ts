@@ -1,4 +1,5 @@
 import { LabeledValue } from "@arco-design/web-react/es/Select/interface";
+import { RelationType } from "../QuestionSelect";
 
 export type OptionType = {
   value: any;
@@ -14,6 +15,7 @@ export type QuestionRadioPropsType = {
   // 用于 PropComponent
   onChange?: (newProps: QuestionRadioPropsType) => void;
   disabled?: boolean;
+  relations?: RelationType[];
 };
 
 export const QuestionRadioDefaultProps: QuestionRadioPropsType = {
@@ -24,6 +26,7 @@ export const QuestionRadioDefaultProps: QuestionRadioPropsType = {
     { value: "item2", text: "选项2" },
     { value: "item3", text: "选项3" },
   ],
+  relations: [],
 };
 
 // 统计组件的属性类型

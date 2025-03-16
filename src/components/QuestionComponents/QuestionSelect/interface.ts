@@ -1,4 +1,4 @@
-import { RelationActionEnum } from "@/components/RelationAction";
+import { RelationActionEnum, RelationSymbolEnum } from "@/components/RelationAction";
 import { OptionType } from "../QuestionRadio";
 
 export type QuestionSelectPropsType = {
@@ -13,6 +13,7 @@ export type QuestionSelectPropsType = {
 };
 
 export type RelationType = {
+  symbol: RelationSymbolEnum;
   targetValue: any;
   action: RelationActionEnum;
   targetItem: string;

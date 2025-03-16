@@ -3,19 +3,31 @@ import { nanoid } from "nanoid";
 import { QuestionRadioPropsType, OptionType } from "./interface";
 import { Button, Checkbox, Form, Input, Select, Space } from "@arco-design/web-react";
 import { IconMinus, IconMinusCircle, IconPlus, IconPlusCircle } from "@arco-design/web-react/icon";
+import { RelationAction } from "@/components";
+import { useGetComponentInfo } from "@/hooks";
+import { RelationActionEnum, RelationSymbolEnum } from "@/components/RelationAction";
 
 const PropComponent: FC<QuestionRadioPropsType> = (props: QuestionRadioPropsType) => {
-  const { title, isVertical, defaultChecked, options = [], onChange, disabled } = props;
+  const { componentList, selectedComponent } = useGetComponentInfo();
+  const {
+    title,
+    isVertical,
+    defaultChecked,
+    options = [],
+    onChange,
+    disabled,
+    relations = [],
+  } = props;
   const [form] = Form.useForm();
 
   useEffect(() => {
-    form.setFieldsValue({ title, isVertical, defaultChecked, options });
-  }, [title, isVertical, defaultChecked, options]);
+    form.setFieldsValue({ title, isVertical, defaultChecked, options, relations });
+  }, [title, isVertical, defaultChecked, options, relations]);
 
   function handleValuesChange() {
     if (onChange == null) return;
     // 触发 onChange 函数
-    const newValues = form.getFieldsValue() as QuestionRadioPropsType;
+    const newValues = form.getFields() as QuestionRadioPropsType;
 
     if (newValues.options) {
       // 需要清除 text undefined 的选项
@@ -38,7 +50,7 @@ const PropComponent: FC<QuestionRadioPropsType> = (props: QuestionRadioPropsType
       <Form.Item label="选项列表">
         <Form.List field="options">
           {(fields, { add, remove }) => (
-            <>
+            <div style={{ padding: "12px", backgroundColor: "rgb(250, 250, 250)" }}>
               {/* 遍历所有的选项（可删除） */}
               {fields.map(({ key, field }, index) => {
                 return (
@@ -77,11 +89,10 @@ const PropComponent: FC<QuestionRadioPropsType> = (props: QuestionRadioPropsType
                   添加选项
                 </Button>
               </Form.Item>
-            </>
+            </div>
           )}
         </Form.List>
       </Form.Item>
-
       <Form.Item label="默认选中" field="defaultChecked">
         <Select
           value={defaultChecked}
@@ -89,6 +100,45 @@ const PropComponent: FC<QuestionRadioPropsType> = (props: QuestionRadioPropsType
             value: text,
             label: text || "",
           }))}></Select>
+      </Form.Item>
+      <Form.Item label="关联项">
+        <Form.List field="relations">
+          {(fields, { add, remove }) => (
+            <div style={{ padding: "12px", backgroundColor: "rgb(250, 250, 250)" }}>
+              {(fields ?? []).map(({ key, field }, index) => {
+                return (
+                  <RelationAction
+                    key={key}
+                    index={index}
+                    field={field}
+                    remove={remove}
+                    targetOptions={options}
+                    multiple={false}
+                  />
+                );
+              })}
+              {/* 添加选项 */}
+              <Form.Item noStyle>
+                <Button
+                  disabled={componentList.length <= 1}
+                  type="text"
+                  onClick={() =>
+                    add({
+                      targetValue: options[0]?.text ?? "",
+                      action: RelationActionEnum.SHOW,
+                      targetItem:
+                        componentList.filter(com => com.fe_id !== selectedComponent?.fe_id)[0]
+                          ?.fe_id ?? "",
+                      symbol: RelationSymbolEnum.EQUAL,
+                    })
+                  }
+                  icon={<IconPlusCircle />}>
+                  添加关联项
+                </Button>
+              </Form.Item>
+            </div>
+          )}
+        </Form.List>
       </Form.Item>
       <Form.Item field="isVertical">
         <Checkbox>竖向排列</Checkbox>

@@ -3,29 +3,37 @@ import { nanoid } from "nanoid";
 import { QuestionCheckboxPropsType, OptionType } from "./interface";
 import { Button, Checkbox, Form, Input, Select, Space } from "@arco-design/web-react";
 import { IconMinus, IconMinusCircle, IconPlus, IconPlusCircle } from "@arco-design/web-react/icon";
+import RelationAction, {
+  RelationActionEnum,
+  RelationSymbolEnum,
+} from "@/components/RelationAction";
+import { useGetComponentInfo } from "@/hooks";
 
 const PropComponent: FC<QuestionCheckboxPropsType> = (props: QuestionCheckboxPropsType) => {
-  const { title, isVertical, list = [], onChange, disabled, defaultChecked = [] } = props;
+  const { componentList, selectedComponent } = useGetComponentInfo();
+  const {
+    title,
+    isVertical,
+    list = [],
+    onChange,
+    disabled,
+    defaultChecked = [],
+    relations = [],
+  } = props;
   const [form] = Form.useForm();
 
   useEffect(() => {
-    form.setFieldsValue({ title, isVertical, list, defaultChecked });
-  }, [title, isVertical, list, defaultChecked]);
+    form.setFieldsValue({ title, isVertical, list, defaultChecked, relations });
+  }, [title, isVertical, list, defaultChecked, relations]);
 
   function handleValuesChange() {
     if (onChange == null) return;
 
-    const newValues = form.getFieldsValue() as QuestionCheckboxPropsType;
+    const newValues = form.getFields() as QuestionCheckboxPropsType;
 
     if (newValues.list) {
       newValues.list = newValues.list.filter(opt => !(opt.text == null));
     }
-
-    // const { list = [] } = newValues;
-    // list.forEach(opt => {
-    //   if (opt.value) return;
-    //   opt.value = nanoid(5);
-    // });
 
     onChange(newValues);
   }
@@ -47,7 +55,7 @@ const PropComponent: FC<QuestionCheckboxPropsType> = (props: QuestionCheckboxPro
       <Form.Item label="选项列表">
         <Form.List field="list">
           {(fields, { add, remove }) => (
-            <>
+            <div style={{ padding: "12px", backgroundColor: "rgb(250, 250, 250)" }}>
               {/* 遍历所有的选项（可删除） */}
               {fields.map(({ key, field }, index) => {
                 return (
@@ -91,7 +99,7 @@ const PropComponent: FC<QuestionCheckboxPropsType> = (props: QuestionCheckboxPro
                   添加选项
                 </Button>
               </Form.Item>
-            </>
+            </div>
           )}
         </Form.List>
       </Form.Item>
@@ -103,6 +111,45 @@ const PropComponent: FC<QuestionCheckboxPropsType> = (props: QuestionCheckboxPro
             value: text,
             label: text || "",
           }))}></Select>
+      </Form.Item>
+      <Form.Item label="关联项">
+        <Form.List field="relations">
+          {(fields, { add, remove }) => (
+            <div style={{ padding: "12px", backgroundColor: "rgb(250, 250, 250)" }}>
+              {(fields ?? []).map(({ key, field }, index) => {
+                return (
+                  <RelationAction
+                    key={key}
+                    index={index}
+                    field={field}
+                    remove={remove}
+                    targetOptions={list}
+                    multiple={true}
+                  />
+                );
+              })}
+              {/* 添加选项 */}
+              <Form.Item noStyle>
+                <Button
+                  disabled={componentList.length <= 1}
+                  type="text"
+                  onClick={() =>
+                    add({
+                      targetValue: list[0]?.text ?? "",
+                      action: RelationActionEnum.SHOW,
+                      targetItem:
+                        componentList.filter(com => com.fe_id !== selectedComponent?.fe_id)[0]
+                          ?.fe_id ?? "",
+                      symbol: RelationSymbolEnum.CONTAIN,
+                    })
+                  }
+                  icon={<IconPlusCircle />}>
+                  添加关联项
+                </Button>
+              </Form.Item>
+            </div>
+          )}
+        </Form.List>
       </Form.Item>
       <Form.Item field="isVertical">
         <Checkbox>竖向排列</Checkbox>

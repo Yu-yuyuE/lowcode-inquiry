@@ -1,3 +1,5 @@
+import { RelationType } from "../QuestionSelect";
+
 export type OptionType = {
   value: string;
   text: string;
@@ -13,6 +15,7 @@ export type QuestionCheckboxPropsType = {
   onChange?: (newProps: QuestionCheckboxPropsType) => void;
   disabled?: boolean;
   defaultChecked?: string[];
+  relations?: RelationType[];
 };
 
 export const QuestionCheckboxDefaultProps: QuestionCheckboxPropsType = {
@@ -23,6 +26,7 @@ export const QuestionCheckboxDefaultProps: QuestionCheckboxPropsType = {
     { value: "item2", text: "选项2", checked: false },
     { value: "item3", text: "选项3", checked: false },
   ],
+  relations: [],
 };
 
 // 统计组件的属性类型

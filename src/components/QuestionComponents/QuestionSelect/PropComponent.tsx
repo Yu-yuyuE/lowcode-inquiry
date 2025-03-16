@@ -117,6 +117,7 @@ const PropComponent: FC<QuestionSelectPropsType> = (props: QuestionSelectPropsTy
                     field={field}
                     remove={remove}
                     targetOptions={options}
+                    multiple={false}
                   />
                 );
               })}
