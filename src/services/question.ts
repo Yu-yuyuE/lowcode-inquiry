@@ -62,3 +62,10 @@ export async function getQuestionService(id: string): Promise<ResDataType> {
   const data = (await axios.get(url)) as ResDataType;
   return data;
 }
+
+// 提交问卷结果
+export async function submitQuestion(id: string, formValue: any): Promise<ResDataType> {
+  const url = `${API_URL}/question/submit/${id}`;
+  const data = (await axios.post(url, { data: formValue })) as ResDataType;
+  return data;
+}

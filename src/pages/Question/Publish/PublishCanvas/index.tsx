@@ -2,12 +2,14 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 import styles from "./index.module.scss";
 import { useGetComponentInfo, useGetPageInfo, useLoadQuestionData } from "@/hooks";
 import { useDispatch } from "react-redux";
-import { Button, Form, Space, Spin } from "@arco-design/web-react";
-import { IconFile } from "@arco-design/web-react/icon";
-import { useTitle } from "ahooks";
+import { Button, Form, Message, Space, Spin } from "@arco-design/web-react";
+import { IconCheckCircleFill, IconFile, IconThumbUp } from "@arco-design/web-react/icon";
+import { useRequest, useTitle } from "ahooks";
 import { ComponentInfoType } from "@/store/componentsReducer";
 import { getComponentConfByType } from "@/components/QuestionComponents";
 import { RelationActionEnum, RelationSymbolEnum } from "@/components/RelationAction";
+import { useParams } from "react-router-dom";
+import { submitQuestion } from "@/services/question";
 
 function genComponent(componentInfo: ComponentInfoType) {
   const { type, props, title, fe_id } = componentInfo; // 每个组件的信息，是从 redux store 获取的（服务端获取）
@@ -16,8 +18,6 @@ function genComponent(componentInfo: ComponentInfoType) {
 
   const { FormComponent, Component } = componentConf;
 
-  console.log(title, fe_id);
-
   return FormComponent ? (
     <Form.Item
       label={title}
@@ -25,7 +25,8 @@ function genComponent(componentInfo: ComponentInfoType) {
       field={fe_id}
       layout="vertical"
       className={styles["form-item-container"]}
-      required={true}>
+      required={true}
+      rules={[{ required: true, message: props?.placeholder ?? "请填写表单" }]}>
       <FormComponent {...props} />
     </Form.Item>
   ) : (
@@ -38,14 +39,28 @@ function genComponent(componentInfo: ComponentInfoType) {
 interface PublishCanvasProps {}
 
 const PublishCanvas: FunctionComponent<PublishCanvasProps> = () => {
+  const { id = "" } = useParams();
   const { componentList } = useGetComponentInfo();
   const [form] = Form.useForm();
   const [hideFeIds, setHideFeIds] = useState<string[]>([]);
+  const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
-  const onClick = () => {
-    console.log("click");
-    const value = form.getFieldsValue();
-    console.log(value);
+  const { run, loading } = useRequest(data => submitQuestion(id, data), {
+    manual: true,
+    onSuccess(result) {
+      Message.success("提交成功，谢谢参与！");
+      setIsSubmitted(true);
+    },
+  });
+
+  const onClick = async () => {
+    try {
+      await form.validate();
+      const value = form.getFieldsValue();
+      run(value);
+    } catch (e) {
+      return;
+    }
   };
 
   const handleChange = () => {
@@ -105,14 +120,26 @@ const PublishCanvas: FunctionComponent<PublishCanvasProps> = () => {
     return hideIds;
   };
 
-  return (
+  return isSubmitted ? (
+    <div className={styles["submitted-container"]}>
+      <div className={styles["icon"]}>
+        <IconCheckCircleFill />
+      </div>
+      提交成功，谢谢参与！
+    </div>
+  ) : (
     <div className={styles.container}>
       <Form form={form} onChange={handleChange} initialValues={{}}>
         {componentList?.map(item => {
           return hideFeIds.includes(item.fe_id) ? null : genComponent(item);
         })}
       </Form>
-      <Button className={styles["footer-btn"]} type="primary" long onClick={onClick}>
+      <Button
+        className={styles["footer-btn"]}
+        type="primary"
+        long
+        onClick={onClick}
+        disabled={loading}>
         提交
       </Button>
     </div>
