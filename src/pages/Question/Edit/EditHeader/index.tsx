@@ -102,7 +102,10 @@ const PublishButton: FC = () => {
       manual: true,
       onSuccess() {
         Message.success("发布成功");
-        nav("/question/stat/" + id); // 发布成功，跳转到统计页面
+        setTimeout(() => {
+          // 发布页面需要时间，所以加个延时
+          nav("/question/stat/" + id); // 发布成功，跳转到统计页面
+        }, 1000);
       },
     },
   );

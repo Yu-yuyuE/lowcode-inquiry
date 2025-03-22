@@ -5,6 +5,7 @@ import { getQuestionStatListService } from "@/services/stat";
 import { STAT_PAGE_SIZE } from "@/constants";
 import { useGetComponentInfo } from "@/hooks";
 import { Pagination, Spin, Table, Typography } from "@arco-design/web-react";
+import { render } from "react-dom";
 
 const { Title } = Typography;
 
@@ -29,9 +30,9 @@ const PageStat: FC<PropsType> = props => {
     {
       refreshDeps: [id, page, pageSize],
       onSuccess(res) {
-        const { total, records: list = [] } = res;
+        const { total, records = [] } = res;
         setTotal(total);
-        setList(list);
+        setList(records);
       },
     },
   );
@@ -56,6 +57,9 @@ const PageStat: FC<PropsType> = props => {
         </div>
       ),
       dataIndex: fe_id,
+      render: (col, record, index) => {
+        return (Array.isArray(col) ? col.join("，") : col) ?? "--";
+      },
     };
   });
   const TableElem = (

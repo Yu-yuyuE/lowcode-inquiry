@@ -1,3 +1,4 @@
+import StatComponent from "./StatComponent";
 import Component from "./Component";
 import FormComponent from "./FormComponen";
 import { QuestionSelectDefaultProps } from "./interface";
@@ -13,4 +14,5 @@ export default {
   PropComponent, // 修改属性
   defaultProps: QuestionSelectDefaultProps,
   FormComponent,
+  StatComponent,
 };

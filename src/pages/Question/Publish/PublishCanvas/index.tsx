@@ -41,6 +41,7 @@ interface PublishCanvasProps {}
 const PublishCanvas: FunctionComponent<PublishCanvasProps> = () => {
   const { id = "" } = useParams();
   const { componentList } = useGetComponentInfo();
+  const { isPublished } = useGetPageInfo();
   const [form] = Form.useForm();
   const [hideFeIds, setHideFeIds] = useState<string[]>([]);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
@@ -139,7 +140,7 @@ const PublishCanvas: FunctionComponent<PublishCanvasProps> = () => {
         type="primary"
         long
         onClick={onClick}
-        disabled={loading}>
+        disabled={loading || !isPublished}>
         提交
       </Button>
     </div>
