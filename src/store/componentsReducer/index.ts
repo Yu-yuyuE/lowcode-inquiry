@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { produce } from "immer";
-import { cloneDeep } from "lodash";
+import cloneDeep from "lodash.clonedeep";
 import { nanoid } from "nanoid";
 import { arrayMove } from "@dnd-kit/sortable";
 import { ComponentPropsType } from "@/components/QuestionComponents";
