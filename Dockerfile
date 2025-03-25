@@ -11,8 +11,7 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build && \
-    ls -la /app
+RUN npm run build
 
 # production stage
 FROM nginx:stable as production-stage
