@@ -3,9 +3,15 @@ FROM node:20.14.0-bullseye-slim as build-stage
 
 WORKDIR /app
 
-# 安装系统依赖（兼容slim镜像）
-RUN apt-get update && \
-    apt-get install -y python3 make g++ git && \
+# 配置国内镜像源并安装系统依赖
+RUN sed -i 's/deb.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list && \
+    sed -i 's/security.debian.org/mirrors.aliyun.com/g' /etc/apt/sources.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    python3 \
+    make \
+    g++ \
+    && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
 # 精准复制包管理文件
