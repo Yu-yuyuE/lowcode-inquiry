@@ -1,17 +1,20 @@
 # build stage
-FROM node:18 as build-stage
+FROM node:20.14.0-bullseye-slim as build-stage
 
 WORKDIR /app
 
-# 安装系统级依赖
-RUN apt-get update && apt-get install -y python3 make g++
+# 安装系统依赖（兼容slim镜像）
+RUN apt-get update && \
+    apt-get install -y python3 make g++ git && \
+    rm -rf /var/lib/apt/lists/*
 
 # 精准复制包管理文件
 COPY package*.json ./
 
-# 安装完整依赖（含devDependencies）
+# 安装完整依赖（带版本校验）
 RUN npm config set registry https://registry.npmmirror.com/ \
-    && npm ci --include=dev --no-optional \
+    && npm ci --include=dev --no-optional --no-audit --prefer-offline \
+    && npm ls @babel/core webpack \
     && npm cache clean --force
 
 # 复制源代码并验证配置
