@@ -10,7 +10,9 @@ module.exports = {
     entry: { app: path.join(__dirname, "./src/index.tsx") },
     output: {
         path: path.join(__dirname, "./dist"),
-        filename: "[name].[chunkhash:4].js"
+        filename: "[name].[chunkhash:4].js",
+        chunkLoadingGlobal: 'webpackJsonpMyApp', // 自定义全局命名空间
+        chunkLoading: 'jsonp'
     },
     plugins: [
         new HtmlWebpackPlugin({

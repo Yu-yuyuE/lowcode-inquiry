@@ -19,7 +19,7 @@ module.exports = merge(config, {
     parallelism: 2, // 限制并行数
     cache: false, // 禁用缓存
     optimization: {
-        runtimeChunk: 'single', // 新增运行时分离
+        // runtimeChunk: 'single', // 新增运行时分离
         minimizer: [
             new TerserPlugin({
                 parallel: 2, // 限制压缩线程
@@ -30,5 +30,26 @@ module.exports = merge(config, {
                 },
             }),
         ],
+        splitChunks: {
+            chunks: 'async',
+            minSize: 30000,
+            maxAsyncRequests: 5,
+            cacheGroups: {
+                defaultVendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10,
+                    reuseExistingChunk: true
+                },
+                arcoDesign: {
+                    test: /[\\/]node_modules[\\/]@arco-design[\\/]web-react[\\/]/,
+                    name: 'arco',
+                    chunks: 'all',
+                    enforce: true
+                }
+            }
+        },
+        runtimeChunk: {
+            name: entrypoint => `runtime-${entrypoint.name}`
+        }
     },
 });
