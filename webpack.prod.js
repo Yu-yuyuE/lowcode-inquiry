@@ -8,7 +8,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = merge(config, {
     mode: "production",
-    devtool: 'source-map',
+    devtool: false,
     plugins: [
         new Dotenv({
             path: path.resolve(__dirname, '.env.production'), // 加载生产环境变量
