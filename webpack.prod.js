@@ -1,7 +1,6 @@
 const config = require("./webpack.config");
 const { merge } = require("webpack-merge");
 const path = require('path');
-const ReplacePlugin = require('webpack-replace-plugin');
 const Dotenv = require('dotenv-webpack');
 const webpack = require('webpack');
 const TerserPlugin = require("terser-webpack-plugin");
