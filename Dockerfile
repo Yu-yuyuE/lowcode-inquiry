@@ -14,6 +14,9 @@ RUN npm install
 
 COPY . .
 
+# 修复内存问题
+RUN npm run fix-memory-limit
+
 RUN npm run build
 
 # production stage

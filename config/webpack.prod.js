@@ -4,6 +4,7 @@ const path = require('path');
 const ReplacePlugin = require('webpack-replace-plugin');
 const Dotenv = require('dotenv-webpack');
 const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = merge(config, {
     mode: "production",
