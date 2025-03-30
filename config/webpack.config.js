@@ -4,7 +4,6 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerWebpackPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-const webpack = require('webpack');
 
 module.exports = {
     entry: { app: path.join(__dirname, "../src/index.tsx") },
@@ -67,9 +66,5 @@ module.exports = {
     },
     stats: {
         modules: false
-    },
-    optimization: {
-        minimize: true,
-        minimizer: [new TerserPlugin()]
     },
 };
